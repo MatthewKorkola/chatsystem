@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package connection;
+
+service ConnectionService {
+    rpc Connect(ConnectRequest) returns (ConnectResponse);
+    rpc Disconnect(DisconnectRequest) returns (DisconnectResponse);
+}
+
+message ConnectRequest {
+}
+
+message ConnectResponse {
+    string message = 1;
+}
+
+message DisconnectRequest {
+}
+
+message DisconnectResponse {
+    string message = 1;
+}
