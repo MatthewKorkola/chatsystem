@@ -3,20 +3,31 @@ syntax = "proto3";
 package connection;
 
 service ConnectionService {
-    rpc Connect(ConnectRequest) returns (ConnectResponse);
-    rpc Disconnect(DisconnectRequest) returns (DisconnectResponse);
+    rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc ClientDisconnected(ClientDisconnectedRequest) returns (ClientDisconnectedResponse);
 }
 
-message ConnectRequest {
+message CreateAccountRequest {
+    string username = 1;
+    string password = 2;
 }
 
-message ConnectResponse {
+message CreateAccountResponse {
     string message = 1;
 }
 
-message DisconnectRequest {
+message LoginRequest {
+    string username = 1;
+    string password = 2;
 }
 
-message DisconnectResponse {
+message LoginResponse {
     string message = 1;
+}
+
+message ClientDisconnectedRequest {
+}
+
+message ClientDisconnectedResponse {
 }
