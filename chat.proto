@@ -6,6 +6,7 @@ service ConnectionService {
     rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc ClientDisconnected(ClientDisconnectedRequest) returns (ClientDisconnectedResponse);
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
 }
 
 message CreateAccountRequest {
@@ -30,4 +31,13 @@ message ClientDisconnectedRequest {
 }
 
 message ClientDisconnectedResponse {
+}
+
+message SendMessageRequest {
+    string username = 1;
+    string message = 2;
+}
+
+message SendMessageResponse {
+    string message = 1;
 }

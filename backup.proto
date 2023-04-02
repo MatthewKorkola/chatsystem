@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package backup;
+
+service BackupService {
+    rpc StoreMessage(StoreMessageRequest) returns (StoreMessageResponse);
+    rpc GetAllMessages(GetAllMessagesRequest) returns (GetAllMessagesResponse);
+}
+
+message StoreMessageRequest {
+    string username = 1;
+    string message = 2;
+}
+
+message StoreMessageResponse {
+    string message = 1;
+}
+
+message GetAllMessagesRequest {
+}
+
+message GetAllMessagesResponse {
+    repeated UserMessages user_messages = 1;
+}
+
+message UserMessages {
+    string username = 1;
+    repeated string messages = 2;
+}
