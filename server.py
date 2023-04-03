@@ -1,6 +1,6 @@
 # Multiuser chating system server
-# Server can read input from client
-# Server create database to store user information
+# Server can read input from client and create database to store user information
+# Also define a build in backup server for storing message history
 # by Zhenrui
 
 # import library
@@ -11,15 +11,15 @@ import time
 import chat_pb2
 import chat_pb2_grpc
 
-import backup_pb2
-import backup_pb2_grpc
-# import database class
+# import database and backup server class
 from database import Database
+from backup_server import BackupServer
 
 class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     def __init__(self):
         # initialize database
         self.db=Database()
+        self.backup_server=BackupServer()
 
     def CreateAccount(self, request, context):
         # adduser status
@@ -49,40 +49,19 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
         for user in users:
             print(f"{user[0]}: {user[1]}")
 
-        backup_channel = grpc.insecure_channel('localhost:8081')
-        backup_stub = backup_pb2_grpc.BackupServiceStub(backup_channel)
-        backup_response = backup_stub.GetAllMessages(backup_pb2.GetAllMessagesRequest())
-
-        # Print message history on the primary server
-        print("\nMessage history in the backup server:")
-        for user_messages in backup_response.user_messages:
-            print(f"{user_messages.username}:")
-            for message in user_messages.messages:
-                print(f"    {message}")
-
+        messages = self.backup_server.get_messages()
+        print("Backup server stored message history:")
+        for message in messages:
+            print(f"{message[1]}: {message[2]}")
+            
         return chat_pb2.ClientDisconnectedResponse()
-
-    def SendMessage(self, request, context):
-        # Print the message on the primary server
-        #print(f"{request.username}: {request.message}")
-
-        # Send the message to the backup server
-        backup_channel = grpc.insecure_channel('localhost:8081')
-        backup_stub = backup_pb2_grpc.BackupServiceStub(backup_channel)
-        backup_response = backup_stub.StoreMessage(backup_pb2.StoreMessageRequest(username=request.username, message=request.message))
-        print(backup_response.message)
-        return chat_pb2.SendMessageResponse(message="Message received")
-
     
-    def broadcast_message(self, username, message):
-        # Find the client's response stream
-        client_peer = next((client_peer for client_username, client_peer in self.connected_clients if client_username == username), None)
-
-        if client_peer:
-            # Send the message using the client's response stream
-            with grpc.insecure_channel(client_peer) as channel:
-                stub = chat_pb2_grpc.ConnectionServiceStub(channel)
-                stub.SendMessage(chat_pb2.SendMessageRequest(message=message))
+    def SendMessage(self, request, context):
+        # hanble client's send message requests
+        print(f"{request.username}: {request.message}")
+        # send message to backup server for storing
+        self.backup_server.store_message(request.username, request.message)
+        return chat_pb2.SendMessageResponse(message="Message received")
 
 # server start
 def serve():
