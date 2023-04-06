@@ -29,7 +29,6 @@ message LoginResponse {
 }
 
 message ClientDisconnectedRequest {
-    string username = 1;
 }
 
 message ClientDisconnectedResponse {
@@ -46,10 +45,9 @@ message SendMessageResponse {
 
 message BroadcastMessageRequest {
     string username = 1;
-    string message = 2;
 }
 
 message BroadcastMessageResponse {
-    string username = 1;
+    string sender_username = 1;
     string message = 2;
 }

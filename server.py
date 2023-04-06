@@ -1,24 +1,55 @@
 # Multiuser chatting system server
 # Server can read input from client and create a database to store user information
-# Also define a built-in backup server for storing message history
-# by Zhenrui
+# Also can connect to backup server for storing message history
+# by Zhenrui, Matthew Korkola
 
 import grpc
 from concurrent import futures
 import time
+import queue
+import threading
 
 import chat_pb2
 import chat_pb2_grpc
-
 from database import Database
-from backup_server import BackupServer
+
+import backup_pb2
+import backup_pb2_grpc
 
 # ConnectionService class that defines the server functionality
 class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     def __init__(self):
         self.db = Database()
-        self.backup_server = BackupServer()
-        self.connected_clients = {}  # New
+        self.clients_lock = threading.Lock()
+        # connected client list
+        self.clients = {}
+        # connect to a backup server
+        self.connect_backup_server()
+    
+    # connect with backup server
+    def connect_backup_server(self):
+        channel = grpc.insecure_channel('localhost:8081')
+        self.backup_stub = backup_pb2_grpc.BackupServiceStub(channel)
+
+    # if there is a client connect add it
+    def add_client(self, username, context):
+        with self.clients_lock:
+            self.clients[username] = context
+
+    # if one client leave, just remove it
+    def remove_client(self, username):
+        with self.clients_lock:
+            if username in self.clients:
+                del self.clients[username]
+
+    # broadcasting function
+    def broadcast(self, sender_username, message):
+        with self.clients_lock:
+            for username, context in self.clients.items():
+                # broadcast the messages to all other clients
+                if username != sender_username:
+                    context.send_message_queue.put((sender_username, message))
+        self.backup_stub.StoreMessageHistory(backup_pb2.StoreMessageHistoryRequest(username=sender_username, message=message))
 
     # Create an account for a new user
     def CreateAccount(self, request, context):
@@ -32,7 +63,6 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     def Login(self, request, context):
         success = self.db.check_password(request.username, request.password)
         if success:
-            self.connected_clients[request.username] = context.peer()  # New
             return chat_pb2.LoginResponse(message="Logged in")
         else:
             return chat_pb2.LoginResponse(message="Invalid username or password")
@@ -41,40 +71,38 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     def ClientDisconnected(self, request, context):
         users = self.db.show_db()
         print("Client disconnected. Users in the database:")
+        # print out all clients account information
         for user in users:
             print(f"{user[0]}: {user[1]}")
-
-        messages = self.backup_server.get_messages()
-        print("Backup server stored message history:")
-        for message in messages:
-            print(f"{message[1]}: {message[2]}")
-
-        if request.username in self.connected_clients:  # New
-            del self.connected_clients[request.username]
-
+        # print all message history
+        self.print_message_history()
         return chat_pb2.ClientDisconnectedResponse()
 
-    # Broadcast a message from the sender to all other clients
-    def broadcast_message(self, sender_username, message):  # New method
-        for username, channel in self.connected_clients.items():
-            if username != sender_username:
-                request = chat_pb2.BroadcastMessageRequest(username=sender_username, message=message)
-                self.BroadcastMessage(request, None)
-
-    # Send a message from a client
     def SendMessage(self, request, context):
-        print(f"{request.username}: {request.message}")
-        self.backup_server.store_message(request.username, request.message)
-        self.broadcast_message(request.username, request.message)  # Call the new method
+        self.broadcast(request.username, request.message)
         return chat_pb2.SendMessageResponse(message="Message received")
 
     # Handle broadcasting the message to the clients
-    def BroadcastMessage(self, request, context):  # Updated
-        while True:
-            new_messages = self.backup_server.get_new_messages()
-            for message in new_messages:
-                yield chat_pb2.BroadcastMessageResponse(username=message[0], message=message[1])
+    def BroadcastMessage(self, request, context):
+        username = request.username
+        context.send_message_queue = queue.Queue()
+        self.add_client(username, context)
 
+        try:
+            while True:
+                sender_username, message = context.send_message_queue.get()
+                if username != sender_username:
+                    yield chat_pb2.BroadcastMessageResponse(sender_username=sender_username, message=message)
+        except grpc.RpcError:
+            self.remove_client(username)
+    
+    # helper function for print message history
+    def print_message_history(self):
+        # get all message history from backup server
+        response = self.backup_stub.GetAllMessageHistory(backup_pb2.GetAllMessageHistoryRequest())
+        print("Message History:")
+        for message in response.message_history:
+            print(f"{message.username}: {message.content}")
 
 # Server setup and start
 def serve():
@@ -88,7 +116,6 @@ def serve():
             time.sleep(86400)
     except KeyboardInterrupt:
         server.stop(0)
-        raise SystemExit
 
 # Run the server
 if __name__ == '__main__':

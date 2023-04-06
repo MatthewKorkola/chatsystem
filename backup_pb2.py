@@ -13,23 +13,23 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x62\x61\x63kup.proto\x12\x06\x62\x61\x63kup\"8\n\x13StoreMessageRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"\'\n\x14StoreMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x17\n\x15GetAllMessagesRequest\"E\n\x16GetAllMessagesResponse\x12+\n\ruser_messages\x18\x01 \x03(\x0b\x32\x14.backup.UserMessages\"2\n\x0cUserMessages\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08messages\x18\x02 \x03(\t2\xab\x01\n\rBackupService\x12I\n\x0cStoreMessage\x12\x1b.backup.StoreMessageRequest\x1a\x1c.backup.StoreMessageResponse\x12O\n\x0eGetAllMessages\x12\x1d.backup.GetAllMessagesRequest\x1a\x1e.backup.GetAllMessagesResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x62\x61\x63kup.proto\x12\x06\x62\x61\x63kup\"?\n\x1aStoreMessageHistoryRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"-\n\x1bStoreMessageHistoryResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\"\x1d\n\x1bGetAllMessageHistoryRequest\"H\n\x1cGetAllMessageHistoryResponse\x12(\n\x0fmessage_history\x18\x01 \x03(\x0b\x32\x0f.backup.Message\",\n\x07Message\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t2\xd2\x01\n\rBackupService\x12^\n\x13StoreMessageHistory\x12\".backup.StoreMessageHistoryRequest\x1a#.backup.StoreMessageHistoryResponse\x12\x61\n\x14GetAllMessageHistory\x12#.backup.GetAllMessageHistoryRequest\x1a$.backup.GetAllMessageHistoryResponseb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'backup_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _STOREMESSAGEREQUEST._serialized_start=24
-  _STOREMESSAGEREQUEST._serialized_end=80
-  _STOREMESSAGERESPONSE._serialized_start=82
-  _STOREMESSAGERESPONSE._serialized_end=121
-  _GETALLMESSAGESREQUEST._serialized_start=123
-  _GETALLMESSAGESREQUEST._serialized_end=146
-  _GETALLMESSAGESRESPONSE._serialized_start=148
-  _GETALLMESSAGESRESPONSE._serialized_end=217
-  _USERMESSAGES._serialized_start=219
-  _USERMESSAGES._serialized_end=269
-  _BACKUPSERVICE._serialized_start=272
-  _BACKUPSERVICE._serialized_end=443
+  _STOREMESSAGEHISTORYREQUEST._serialized_start=24
+  _STOREMESSAGEHISTORYREQUEST._serialized_end=87
+  _STOREMESSAGEHISTORYRESPONSE._serialized_start=89
+  _STOREMESSAGEHISTORYRESPONSE._serialized_end=134
+  _GETALLMESSAGEHISTORYREQUEST._serialized_start=136
+  _GETALLMESSAGEHISTORYREQUEST._serialized_end=165
+  _GETALLMESSAGEHISTORYRESPONSE._serialized_start=167
+  _GETALLMESSAGEHISTORYRESPONSE._serialized_end=239
+  _MESSAGE._serialized_start=241
+  _MESSAGE._serialized_end=285
+  _BACKUPSERVICE._serialized_start=288
+  _BACKUPSERVICE._serialized_end=498
 # @@protoc_insertion_point(module_scope)

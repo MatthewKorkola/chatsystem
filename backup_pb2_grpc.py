@@ -14,28 +14,28 @@ class BackupServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.StoreMessage = channel.unary_unary(
-                '/backup.BackupService/StoreMessage',
-                request_serializer=backup__pb2.StoreMessageRequest.SerializeToString,
-                response_deserializer=backup__pb2.StoreMessageResponse.FromString,
+        self.StoreMessageHistory = channel.unary_unary(
+                '/backup.BackupService/StoreMessageHistory',
+                request_serializer=backup__pb2.StoreMessageHistoryRequest.SerializeToString,
+                response_deserializer=backup__pb2.StoreMessageHistoryResponse.FromString,
                 )
-        self.GetAllMessages = channel.unary_unary(
-                '/backup.BackupService/GetAllMessages',
-                request_serializer=backup__pb2.GetAllMessagesRequest.SerializeToString,
-                response_deserializer=backup__pb2.GetAllMessagesResponse.FromString,
+        self.GetAllMessageHistory = channel.unary_unary(
+                '/backup.BackupService/GetAllMessageHistory',
+                request_serializer=backup__pb2.GetAllMessageHistoryRequest.SerializeToString,
+                response_deserializer=backup__pb2.GetAllMessageHistoryResponse.FromString,
                 )
 
 
 class BackupServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def StoreMessage(self, request, context):
+    def StoreMessageHistory(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetAllMessages(self, request, context):
+    def GetAllMessageHistory(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -44,15 +44,15 @@ class BackupServiceServicer(object):
 
 def add_BackupServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'StoreMessage': grpc.unary_unary_rpc_method_handler(
-                    servicer.StoreMessage,
-                    request_deserializer=backup__pb2.StoreMessageRequest.FromString,
-                    response_serializer=backup__pb2.StoreMessageResponse.SerializeToString,
+            'StoreMessageHistory': grpc.unary_unary_rpc_method_handler(
+                    servicer.StoreMessageHistory,
+                    request_deserializer=backup__pb2.StoreMessageHistoryRequest.FromString,
+                    response_serializer=backup__pb2.StoreMessageHistoryResponse.SerializeToString,
             ),
-            'GetAllMessages': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetAllMessages,
-                    request_deserializer=backup__pb2.GetAllMessagesRequest.FromString,
-                    response_serializer=backup__pb2.GetAllMessagesResponse.SerializeToString,
+            'GetAllMessageHistory': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllMessageHistory,
+                    request_deserializer=backup__pb2.GetAllMessageHistoryRequest.FromString,
+                    response_serializer=backup__pb2.GetAllMessageHistoryResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -65,7 +65,7 @@ class BackupService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def StoreMessage(request,
+    def StoreMessageHistory(request,
             target,
             options=(),
             channel_credentials=None,
@@ -75,14 +75,14 @@ class BackupService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/backup.BackupService/StoreMessage',
-            backup__pb2.StoreMessageRequest.SerializeToString,
-            backup__pb2.StoreMessageResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/backup.BackupService/StoreMessageHistory',
+            backup__pb2.StoreMessageHistoryRequest.SerializeToString,
+            backup__pb2.StoreMessageHistoryResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetAllMessages(request,
+    def GetAllMessageHistory(request,
             target,
             options=(),
             channel_credentials=None,
@@ -92,8 +92,8 @@ class BackupService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/backup.BackupService/GetAllMessages',
-            backup__pb2.GetAllMessagesRequest.SerializeToString,
-            backup__pb2.GetAllMessagesResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/backup.BackupService/GetAllMessageHistory',
+            backup__pb2.GetAllMessageHistoryRequest.SerializeToString,
+            backup__pb2.GetAllMessageHistoryResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
