@@ -40,7 +40,132 @@ def loginUser(stub, userString, passwordString, window):
 
         # Start the chat
         chatUser = chatClient(username,password,stub)
+    else:
+        # Inform the user about the error
+        messagebox.showerror("Warning", f"Invalid username or password")
 
+        window.destroy()
+        
+        startingPage(stub)
+
+# Function to create users account in the chat server
+def createAccount(stub, userString, passwordString, window):
+    # Get the user username
+    username = userString.get()
+
+    print(username)
+
+    # Get the user password
+    password = passwordString.get()
+
+    response = stub.CreateAccount(chat_pb2.CreateAccountRequest(username=username, password=password))
+    
+    if response.message == "Account created":
+        
+        # Greet the user
+        messagebox.showinfo("Success", f"Hello {username}, Account Created")
+
+        window.destroy()
+
+        startingPage(stub)
+    else:
+
+        # Inform the user about the error
+        messagebox.showerror("Warning", f'Username already exists')
+
+        window.destroy()
+
+        startingPage(stub)
+
+
+# Function to display the login page
+def getLoginPage(stub, window):
+
+    window.destroy()
+
+    login_screen=Tk()
+
+    login_screen.title("Login")
+
+    login_screen.geometry("350x250")
+
+    Label(login_screen, text="Please enter your credentials", font='Helvetica 12 bold').grid(row=0,column=1)
+    
+    Label(login_screen, text="").grid(row=1,column=0)
+
+    Label(login_screen, text="Username").grid(row=2,column=0)
+
+    username = tk.StringVar()
+    
+    username_login_entry = Entry(login_screen, textvariable=username).grid(row=2,column=1)
+    
+    Label(login_screen, text="").grid(row=3,column=0)
+
+    Label(login_screen, text="Password").grid(row=4, column=0)
+
+
+    password = StringVar()
+    
+    password__login_entry = Entry(login_screen, textvariable=password, show= '*').grid(row=4,column=1)
+
+    Label(login_screen, text="").grid(row=5,column=0)
+    
+    button =  Button(login_screen, text ="Login", width=10, height=2, command=lambda: loginUser(stub, username, password,login_screen)).grid(row=6,column=1)
+    
+    login_screen.mainloop()
+    
+# Function to display the account page
+def getAccountPage(stub, window):
+
+    window.destroy()
+
+    account_screen=Tk()
+
+    account_screen.title("Create Account")
+    
+    account_screen.geometry("450x250")
+
+    Label(account_screen, text="Please choose a username and a password", font='Helvetica 12 bold').grid(row=0,column=1)
+    
+    Label(account_screen, text="").grid(row=1,column=0)
+
+    Label(account_screen, text="Username").grid(row=2,column=0)
+
+    username = tk.StringVar()
+    
+    username_login_entry = Entry(account_screen, textvariable=username).grid(row=2,column=1)
+    
+    Label(account_screen, text="").grid(row=3,column=0)
+
+    Label(account_screen, text="Password").grid(row=4, column=0)
+
+    password = StringVar()
+    
+    password__login_entry = Entry(account_screen, textvariable=password, show= '*').grid(row=4,column=1)
+
+    Label(account_screen, text="").grid(row=5,column=0)
+    
+    button =  Button(account_screen, text ="Create Account", width=15, height=2, command=lambda: createAccount(stub, username, password,account_screen)).grid(row=6,column=1)
+    
+    account_screen.mainloop()
+
+
+# Function to display the startingPage
+def startingPage(stub):
+
+    # Create the frame for getting the user choice
+    root = Tk()  
+    
+    root.withdraw()
+
+    # Get the user choice
+    while True:
+        choice = simpledialog.askstring("Choice", "Press:\n\n *1 to create an account\n\n *2 to log in\n\n  *q to exit\n\n",parent=root)
+        # Not yet implemented, will be done in the next version
+        if choice == "1":
+            getAccountPage(stub, root)
+        if choice == "2":
+            getLoginPage(stub,root)
         
 
 
@@ -119,29 +244,6 @@ class chatClient:
                 self.msg_area.config(state='disabled')
             self.input_msg.delete(1.0,"end-1c")
 
-        
-
-    # Is not used anymore, will remove in the next version
-    def login(self, username, passowrd):
-        if username!="" and passowrd!="":
-            response = self.stub.CreateAccount(chat_pb2.CreateAccountRequest(username=username, password=password))
-        print(response.message)
-        if response.message == "Logged in":
-            self.username = username
-            self.password = password
-            self.status = "connected"
-        return self.status
-        
-    # Is not implemented yet, will be done in the next version
-    def createAccount(self):
-        username = input("Enter username: ")
-        password = input("Enter password: ")
-        response = self.stub.Login(chat_pb2.LoginRequest(username=username, password=password))
-        print(response.message)
-        if response.message == "Account created":
-            self.username = username
-            self.password = password
-
     # Create the main chat page
     def gui_mainpage(self):
 
@@ -187,48 +289,8 @@ if __name__ == '__main__':
         
     stub = chat_pb2_grpc.ConnectionServiceStub(channel)
 
-    # Create the frame for getting the user choice
-    root = Tk()  
-    root.withdraw()
-
-    # Get the user choice
-    while True:
-        choice = simpledialog.askstring("Choice", "Press:\n\n *1 to create an account\n\n *2 to log in\n\n  *q to exit\n\n",parent=root)
-        # Not yet implemented, will be done in the next version
-        if choice == "1":
-            print("choice 1")
-        # If the user chose to connect to the chat
-        elif choice == "2":
-                
-                # Destroy the current fram and display the login frame
-                root.destroy()
-                login_screen=Tk()
-                login_screen.title("Login")
-                login_screen.geometry("350x250")
-
-                Label(login_screen, text="Please enter your credentials", font='Helvetica 12 bold').grid(row=0,column=1)
-               
-                Label(login_screen, text="").grid(row=1,column=0)
-
-                Label(login_screen, text="Username").grid(row=2,column=0)
-
-                username = tk.StringVar()
-                
-                username_login_entry = Entry(login_screen, textvariable=username).grid(row=2,column=1)
-                
-                Label(login_screen, text="").grid(row=3,column=0)
-
-                Label(login_screen, text="Password").grid(row=4, column=0)
-
-
-                password = StringVar()
-                password__login_entry = Entry(login_screen, textvariable=password, show= '*').grid(row=4,column=1)
-
-                Label(login_screen, text="").grid(row=5,column=0)
-                
-                button =  Button(login_screen, text ="Login", width=10, height=1, command=lambda: loginUser(stub, username, password,login_screen)).grid(row=6,column=1)
-                login_screen.mainloop()
-                
+    # Display the starting page
+    startingPage(stub)
     
     
     
