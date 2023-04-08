@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\x12\nconnection\":\n\x14\x43reateAccountRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"(\n\x15\x43reateAccountResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\" \n\rLoginResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1b\n\x19\x43lientDisconnectedRequest\"\x1c\n\x1a\x43lientDisconnectedResponse\"7\n\x12SendMessageRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"&\n\x13SendMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"+\n\x17\x42roadcastMessageRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"D\n\x18\x42roadcastMessageResponse\x12\x17\n\x0fsender_username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2\xbd\x03\n\x11\x43onnectionService\x12T\n\rCreateAccount\x12 .connection.CreateAccountRequest\x1a!.connection.CreateAccountResponse\x12<\n\x05Login\x12\x18.connection.LoginRequest\x1a\x19.connection.LoginResponse\x12\x63\n\x12\x43lientDisconnected\x12%.connection.ClientDisconnectedRequest\x1a&.connection.ClientDisconnectedResponse\x12N\n\x0bSendMessage\x12\x1e.connection.SendMessageRequest\x1a\x1f.connection.SendMessageResponse\x12_\n\x10\x42roadcastMessage\x12#.connection.BroadcastMessageRequest\x1a$.connection.BroadcastMessageResponse0\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\x12\nconnection\":\n\x14\x43reateAccountRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"(\n\x15\x43reateAccountResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\" \n\rLoginResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1b\n\x19\x43lientDisconnectedRequest\"\x1c\n\x1a\x43lientDisconnectedResponse\"7\n\x12SendMessageRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"&\n\x13SendMessageResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"+\n\x17\x42roadcastMessageRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"D\n\x18\x42roadcastMessageResponse\x12\x17\n\x0fsender_username\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x07\n\x05\x45mpty\"\x19\n\x08UserList\x12\r\n\x05users\x18\x01 \x03(\t2\xf2\x03\n\x11\x43onnectionService\x12T\n\rCreateAccount\x12 .connection.CreateAccountRequest\x1a!.connection.CreateAccountResponse\x12<\n\x05Login\x12\x18.connection.LoginRequest\x1a\x19.connection.LoginResponse\x12\x63\n\x12\x43lientDisconnected\x12%.connection.ClientDisconnectedRequest\x1a&.connection.ClientDisconnectedResponse\x12N\n\x0bSendMessage\x12\x1e.connection.SendMessageRequest\x1a\x1f.connection.SendMessageResponse\x12_\n\x10\x42roadcastMessage\x12#.connection.BroadcastMessageRequest\x1a$.connection.BroadcastMessageResponse0\x01\x12\x33\n\x08getUsers\x12\x11.connection.Empty\x1a\x14.connection.UserListb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'chat_pb2', globals())
@@ -40,6 +40,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _BROADCASTMESSAGEREQUEST._serialized_end=413
   _BROADCASTMESSAGERESPONSE._serialized_start=415
   _BROADCASTMESSAGERESPONSE._serialized_end=483
-  _CONNECTIONSERVICE._serialized_start=486
-  _CONNECTIONSERVICE._serialized_end=931
+  _EMPTY._serialized_start=485
+  _EMPTY._serialized_end=492
+  _USERLIST._serialized_start=494
+  _USERLIST._serialized_end=519
+  _CONNECTIONSERVICE._serialized_start=522
+  _CONNECTIONSERVICE._serialized_end=1020
 # @@protoc_insertion_point(module_scope)

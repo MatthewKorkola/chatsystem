@@ -16,6 +16,7 @@ class Database:
             cursor=conn.cursor()
             cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                                 username TEXT PRIMARY KEY NOT NULL,
+                                other_user TEXT,
                                 password TEXT NOT NULL)''')
             conn.commit()
 

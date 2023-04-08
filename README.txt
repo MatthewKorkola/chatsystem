@@ -12,6 +12,5 @@ python server.py
 python backup_server.py
 
 3. Run multi clients open mulit terminals run on each one:
-python client.py
-
-It is better to separate the backup server from primary one, and the broadcasting function is well.
+python gui_client.py
+(Also, there is a terminal version of application by run python client.py)

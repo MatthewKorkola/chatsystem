@@ -8,6 +8,7 @@ service ConnectionService {
     rpc ClientDisconnected(ClientDisconnectedRequest) returns (ClientDisconnectedResponse);
     rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
     rpc BroadcastMessage(BroadcastMessageRequest) returns (stream BroadcastMessageResponse);
+    rpc getUsers(Empty) returns (UserList);
 }
 
 message CreateAccountRequest {
@@ -37,6 +38,7 @@ message ClientDisconnectedResponse {
 message SendMessageRequest {
     string username = 1;
     string message = 2;
+   
 }
 
 message SendMessageResponse {
@@ -50,4 +52,10 @@ message BroadcastMessageRequest {
 message BroadcastMessageResponse {
     string sender_username = 1;
     string message = 2;
+}
+
+message Empty {}
+
+message UserList {
+    repeated string users = 1;
 }

@@ -62,6 +62,7 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     # Login a user if their credentials are correct
     def Login(self, request, context):
         success = self.db.check_password(request.username, request.password)
+        print(request.username)
         if success:
             return chat_pb2.LoginResponse(message="Logged in")
         else:
@@ -79,6 +80,7 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
         return chat_pb2.ClientDisconnectedResponse()
 
     def SendMessage(self, request, context):
+        print("receiving message")
         self.broadcast(request.username, request.message)
         return chat_pb2.SendMessageResponse(message="Message received")
 
@@ -103,6 +105,12 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
         print("Message History:")
         for message in response.message_history:
             print(f"{message.username}: {message.content}")
+
+    def getUsers(self, request, context):
+        with self.clients_lock:
+            users_list = list(self.clients.keys())
+            return chat_pb2.UserList(users=users_list)
+
 
 # Server setup and start
 def serve():
