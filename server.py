@@ -74,7 +74,7 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
         print("Client disconnected. Users in the database:")
         # print out all clients account information
         for user in users:
-            print(f"{user[0]}: {user[1]}")
+            print(f"{user[0]}: {user[2]}")
         # print all message history
         self.print_message_history()
         return chat_pb2.ClientDisconnectedResponse()

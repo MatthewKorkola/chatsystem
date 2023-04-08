@@ -169,16 +169,28 @@ def startingPage(stub):
         if choice == "2":
             getLoginPage(stub,root)
 
+        # elif choice == "q":
+        #     stub.ClientDisconnected(chat_pb2.ClientDisconnectedRequest())
+            
+        #     # Inform the user the chat is closing
+        #     answer = messagebox.showinfo("Close Chat", f"Closing chat, Bye!")
+        #     if answer:
+        #         root.destroy()
+        # else:
+        #     # Inform the user the chat is closing
+        #     messagebox.showerror("Error", f"Invalid input")
         elif choice == "q":
             stub.ClientDisconnected(chat_pb2.ClientDisconnectedRequest())
             
             # Inform the user the chat is closing
             answer = messagebox.showinfo("Close Chat", f"Closing chat, Bye!")
-            if answer:
-                root.destroy()
+            break  # Break from the while loop
         else:
             # Inform the user the chat is closing
             messagebox.showerror("Error", f"Invalid input")
+            
+    # Destroy the root window after the loop
+    root.destroy()
             
         
 
