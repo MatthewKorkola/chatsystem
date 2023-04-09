@@ -21,6 +21,8 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     def __init__(self):
         self.db = Database()
         self.clients_lock = threading.Lock()
+        self.users_mood = []
+        self.usersConnected = []
         # connected client list
         self.clients = {}
         # connect to a backup server
@@ -62,22 +64,23 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
     # Login a user if their credentials are correct
     def Login(self, request, context):
         success = self.db.check_password(request.username, request.password)
-        print(request.username)
         if success:
+            self.usersConnected.append(request.username)
             return chat_pb2.LoginResponse(message="Logged in")
         else:
             return chat_pb2.LoginResponse(message="Invalid username or password")
 
     # Handle the disconnection of a client
     def ClientDisconnected(self, request, context):
+        self.usersConnected.remove(request.username)
         users = self.db.show_db()
         print("Client disconnected. Users in the database:")
         # print out all clients account information
         for user in users:
-            print(f"{user[0]}: {user[2]}")
+            print(f"{user[0]}: {user[1]}")
         # print all message history
         self.print_message_history()
-        return chat_pb2.ClientDisconnectedResponse()
+        return chat_pb2.ClientDisconnectedResponse(message="Message received")
 
     def SendMessage(self, request, context):
         print("receiving message")
@@ -108,7 +111,7 @@ class ConnectionService(chat_pb2_grpc.ConnectionServiceServicer):
 
     def getUsers(self, request, context):
         with self.clients_lock:
-            users_list = list(self.clients.keys())
+            users_list = self.usersConnected
             return chat_pb2.UserList(users=users_list)
 
 

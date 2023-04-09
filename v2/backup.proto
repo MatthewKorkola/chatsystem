@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package backup;
+
+service BackupService {
+    rpc StoreMessageHistory(StoreMessageHistoryRequest) returns (StoreMessageHistoryResponse);
+    rpc GetAllMessageHistory(GetAllMessageHistoryRequest) returns (GetAllMessageHistoryResponse);
+}
+
+message StoreMessageHistoryRequest {
+    string username = 1;
+    string message = 2;
+}
+
+message StoreMessageHistoryResponse {
+    string status = 1;
+}
+
+message GetAllMessageHistoryRequest {
+}
+
+message GetAllMessageHistoryResponse {
+    repeated Message message_history = 1;
+}
+
+message Message {
+    string username = 1;
+    string content = 2;
+}
