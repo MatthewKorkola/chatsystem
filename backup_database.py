@@ -1,6 +1,6 @@
 # Multiuser chating system backup database
 # Backup databse store all messges from backup server
-# by Zhenrui
+# by Zhenrui Zhang
 
 import sqlite3
 

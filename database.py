@@ -1,6 +1,6 @@
 # Multiuser chating system database
 # Define functions for account information 
-# by Zhenrui
+# by Zhenrui Zhang
 
 # import library
 import sqlite3

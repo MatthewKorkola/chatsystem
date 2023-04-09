@@ -1,6 +1,6 @@
 # Multiuser chating system backup server
 # Backup Server can read messages from primary server and store them in backup database
-# by Zhenrui
+# by Zhenrui Zhang
 
 import grpc
 from concurrent import futures

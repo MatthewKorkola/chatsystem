@@ -30,10 +30,13 @@ message LoginResponse {
 }
 
 message ClientDisconnectedRequest {
+    string username = 1;
 }
 
 message ClientDisconnectedResponse {
+    string message = 1;
 }
+
 
 message SendMessageRequest {
     string username = 1;
@@ -58,4 +61,11 @@ message Empty {}
 
 message UserList {
     repeated string users = 1;
+}
+
+message moodVal {
+
+    string username = 1;
+    string mood = 2;
+
 }

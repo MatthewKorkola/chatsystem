@@ -1,12 +1,13 @@
 # Multiuser chating system client
 # Client can input account information
-# by Zhenrui, Matthew Korkola
+# by Zhenrui Zhang, Matthew Korkola, Irmene-Valerie Leonard
 
 # import library
 import grpc
 import chat_pb2
 import chat_pb2_grpc
 import threading
+import os
 
 # receive broadcasting message from primary server and print it out
 def receive_messages_thread(stub, username):
@@ -23,7 +24,7 @@ def start_chat(username, stub):
         message = input("> ")
 
         if message == "exit":
-            stub.ClientDisconnected(chat_pb2.ClientDisconnectedRequest())
+            stub.ClientDisconnected(chat_pb2.ClientDisconnectedRequest(username = username))
             break
 
         response = stub.SendMessage(chat_pb2.SendMessageRequest(username=username, message=message))
@@ -50,8 +51,8 @@ def run():
             if response.message == "Logged in":
                 start_chat(username, stub)
         elif choice == "q":
-            stub.ClientDisconnected(chat_pb2.ClientDisconnectedRequest())
-            break
+            print("##Exiting application##")
+            os._exit(0)
         else:
             print("Invalid input")
 
